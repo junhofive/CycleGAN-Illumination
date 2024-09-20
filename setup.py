@@ -7,25 +7,21 @@ import train
 import test
 
 
-def experiment_CycleGAN(input_dir, output_dir,
-                        dataset, epochs, 
+def experiment_CycleGAN(output_dir,
+                        epochs, 
                         saved_location=None, 
                         trained_epoch=0,
                         dataType='Portal'):
     
-    train_loader, test_loader = util.initialize_datasets(input_dir, batch_size=1, percentage=0.8)
+    train_loader, test_loader = util.initialize_datasets(dataType, percentage=0.8)
 
     generator_A2B = CG.UNet(3, 3)
     generator_B2A = CG.UNet(3, 3)
     discriminator_A = CG.PatchGANDiscriminator()
     discriminator_B = CG.PatchGANDiscriminator()
 
-    new_dir = 'W:\\Research'
-    out_dir = os.path.join(new_dir, output_dir)
-
     if saved_location:
-        trained_dir = os.path.join(new_dir, saved_location)
-        trained_dir = os.path.join(trained_dir, 'checkpoints')
+        trained_dir = saved_location
         generator_A2B.load_state_dict(torch.load(os.path.join(trained_dir, f"generator_A2B_epoch_{trained_epoch}.pth")), strict=False)
     else:
         generator_A2B, generator_B2A = train.train_cycle_gan(train_loader,
@@ -34,9 +30,9 @@ def experiment_CycleGAN(input_dir, output_dir,
                                                discriminator_A,
                                                discriminator_B,
                                                num_epochs=epochs,
-                                               prevEpoch=trained_epoch, root_dir=out_dir)
+                                               prevEpoch=trained_epoch, root_dir=output_dir)
 
     test_dir = f'{dataType}_Validation'
-    train_loader, test_loader = util.initialize_datasets(test_dir, dataset, batch_size=1, percentage=0.8)
-    test.evaluate_cycleGAN(generator_A2B, test_loader, out_dir,
+    train_loader, test_loader = util.initialize_datasets(dataType, percentage=0.8)
+    test.evaluate_cycleGAN(generator_A2B, test_loader, output_dir,
                       f"CycleGAN_{dataType}_{trained_epoch}_metrics.txt", trained_epoch=(trained_epoch + epochs))

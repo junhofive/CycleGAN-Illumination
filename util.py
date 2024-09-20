@@ -4,7 +4,7 @@ from torchvision import transforms
 import os
 
 
-def initialize_datasets(batch_size, dataType='Portal', percentage=0.8):
+def initialize_datasets(dataType='Portal', percentage=0.8):
     # Create a dataset object with all images
     transform = transforms.Compose([
             transforms.Resize((256, 256)),
@@ -31,7 +31,7 @@ def initialize_datasets(batch_size, dataType='Portal', percentage=0.8):
     # Create data loaders for training and testing datasets
     train_loader = None
     if percentage > 0:
-        train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=4)
+        train_loader = DataLoader(train_dataset, batch_size=1, shuffle=True, num_workers=4)
     test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False, num_workers=4)
 
     return train_loader, test_loader

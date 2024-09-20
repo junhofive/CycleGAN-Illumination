@@ -11,18 +11,18 @@ import metrics
 
 
 
-def evaluate_cycleGAN(generator_A2B, dataloader, output_dir, results_file, trained_epoch=100):
+def evaluate_cycleGAN(generator_A2B, dataloader, output_dir, results_file, trained_epoch=200):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     generator_A2B = generator_A2B.to(device).eval()
 
+    out_dir = os.path.join(output_dir, f'Results_Epoch_{trained_epoch}')
 
-    out_dir = os.path.join(output_dir, f'validation_epoch{trained_epoch}')
     if not os.path.exists(out_dir):
         os.makedirs(out_dir)
     else:
         count = 1
         while (os.path.exists(out_dir)):
-            out_dir = os.path.join(output_dir, f'validation_epoch{trained_epoch}_{count}')
+            out_dir = os.path.join(output_dir, f'Results_Epoch_{trained_epoch}_{count}')
             count += 1
         os.makedirs(out_dir)
 
