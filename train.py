@@ -9,6 +9,7 @@ from tqdm.auto import tqdm
 def train_cycle_gan(dataloader, generator_A2B, generator_B2A,
                     discriminator_A, discriminator_B, num_epochs, root_dir,
                     prevEpoch=0, lambda_cycle=10.0):
+    
     # Move models to GPU if CUDA is available
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     generator_A2B = generator_A2B.to(device)
@@ -81,15 +82,13 @@ def train_cycle_gan(dataloader, generator_A2B, generator_B2A,
                 loss_D_B.backward()
                 optimizer_D_B.step()
 
-            # Optionally, print epoch number or other information to monitor progress
+            # Create checkpoints for the training in case of interruption
             if (epoch + 1) % checkpoint_interval == 0:
                 torch.save(generator_A2B.state_dict(), os.path.join(check_dir, f'generator_A2B_epoch_{epoch + prevEpoch + 1}.pth'))
                 torch.save(generator_B2A.state_dict(), os.path.join(check_dir, f'generator_B2A_epoch_{epoch + prevEpoch + 1}.pth'))
                 torch.save(discriminator_A.state_dict(), os.path.join(check_dir, f'discriminator_A_epoch_{epoch + prevEpoch + 1}.pth'))
                 torch.save(discriminator_B.state_dict(), os.path.join(check_dir, f'discriminator_B_epoch_{epoch + prevEpoch + 1}.pth'))
-            # print(f"\nEpoch [{epoch + 1}/{num_epochs}]: Discriminator A Loss={loss_D_A.item():.4f},\tDiscriminator B Loss={loss_D_B.item():.4f},\t"
-            #       f"Generator A2B Loss={loss_GAN_A2B.item():.4f},\tGenerator B2A Loss={loss_GAN_B2A.item():.4f},\t"
-            #       f"Generator Cycle A Loss={loss_cycle_A.item():.4f},\tGenerator Cycle B Loss={loss_cycle_B.item():.4f}")
+
             loss_str = (f"\nEpoch {epoch + prevEpoch + 1}: "
                         f"Discriminator A Loss={loss_D_A.item():.4f},\t"
                         f"Discriminator B Loss={loss_D_B.item():.4f},\t"
