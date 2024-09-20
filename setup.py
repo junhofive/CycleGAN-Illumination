@@ -7,15 +7,13 @@ import train
 import test
 
 
-def experiment_CycleGAN(data_dir, save_dir,
-                        dataset, batch_size=1,
-                        epochs=100, groups=1,
-                        saved_location=None, trained_epoch=0,
-                        old_model=False, dataType='Portal'):
+def experiment_CycleGAN(input_dir, output_dir,
+                        dataset, epochs, 
+                        saved_location=None, 
+                        trained_epoch=0,
+                        dataType='Portal'):
     
-    input_dir = os.path.join(root_dir, data_dir)
-
-    train_loader, test_loader = util.initialize_datasets(input_dir, batch_size, percentage=0.8)
+    train_loader, test_loader = util.initialize_datasets(input_dir, batch_size=1, percentage=0.8)
 
     generator_A2B = CG.UNet(3, 3)
     generator_B2A = CG.UNet(3, 3)
@@ -23,7 +21,7 @@ def experiment_CycleGAN(data_dir, save_dir,
     discriminator_B = CG.PatchGANDiscriminator()
 
     new_dir = 'W:\\Research'
-    out_dir = os.path.join(new_dir, save_dir)
+    out_dir = os.path.join(new_dir, output_dir)
 
     if saved_location:
         trained_dir = os.path.join(new_dir, saved_location)
@@ -38,7 +36,7 @@ def experiment_CycleGAN(data_dir, save_dir,
                                                num_epochs=epochs,
                                                prevEpoch=trained_epoch, root_dir=out_dir)
 
-    input_dir = os.path.join(root_dir, 'PortalValidationSet256')
-    train_loader, test_loader = util.initialize_datasets(input_dir, dataset, batch_size, percentage=0.8)
+    test_dir = f'{dataType}_Validation'
+    train_loader, test_loader = util.initialize_datasets(test_dir, dataset, batch_size=1, percentage=0.8)
     test.evaluate_cycleGAN(generator_A2B, test_loader, out_dir,
                       f"CycleGAN_{dataType}_{trained_epoch}_metrics.txt", trained_epoch=(trained_epoch + epochs))
