@@ -14,4 +14,9 @@ Synthesis of realistic virtual environments requires careful rendering of light 
     git clone https://github.com/junhofive/CycleGAN-Illumination.git
     ```
 
-2. 
+2. Run the Setup Script.
+   ```console
+    sh setup.sh
+    ```
+
+3. Run the Main Program.
