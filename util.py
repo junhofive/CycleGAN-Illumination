@@ -4,20 +4,20 @@ from torchvision import transforms
 import os
 
 
-def initialize_datasets(root_dir, batch_size, percentage=0.8):
+def initialize_datasets(batch_size, dataType='Portal', percentage=0.8):
     # Create a dataset object with all images
     transform = transforms.Compose([
             transforms.Resize((256, 256)),
             transforms.ToTensor(),
     ])
 
-    input_dir = os.path.join(root_dir, "NonRT")
-    truth_dir = os.path.join(root_dir, "RT")
+    input_dir = os.path.join(dataType, "NonRT")
+    truth_dir = os.path.join(dataType, "RT")
 
     dataset = DL.PortalDataset(input_dir, truth_dir, transform=transform)
 
-    # Step 2: Calculate indices for training and testing subsets
-    train_size = int(percentage * len(dataset))  # 80% for training
+    # Calculate indices for training and testing subsets
+    train_size = int(percentage * len(dataset))
     test_size = len(dataset) - train_size
     train_indices, test_indices = random_split(range(len(dataset)), [train_size, test_size])
 
