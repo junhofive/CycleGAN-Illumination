@@ -32,7 +32,7 @@ def experiment_CycleGAN(output_dir,
                                                num_epochs=epochs,
                                                prevEpoch=trained_epoch, root_dir=output_dir)
 
-    test_dir = f'{dataType}_Validation'
+    test_dir = os.path.join(output_dir, f'{dataType}_Validation')
     train_loader, test_loader = util.initialize_datasets(dataType, percentage=0.8)
-    test.evaluate_cycleGAN(generator_A2B, test_loader, output_dir,
+    test.evaluate_cycleGAN(generator_A2B, test_loader, test_dir,
                       f"CycleGAN_{dataType}_{trained_epoch}_metrics.txt", trained_epoch=(trained_epoch + epochs))
