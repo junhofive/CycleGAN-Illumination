@@ -9,6 +9,8 @@ Synthesis of realistic virtual environments requires careful rendering of light 
 
 
 ## Setup
+0. Install PyTorch for your environment.
+
 1. Clone the repository.
    ```console
     git clone https://github.com/junhofive/CycleGAN-Illumination.git
