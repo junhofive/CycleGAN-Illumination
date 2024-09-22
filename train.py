@@ -33,17 +33,12 @@ def train_cycle_gan(dataloader, generator_A2B, generator_B2A,
     if not os.path.exists(check_dir):
         os.makedirs(check_dir)
 
-    ### Identity Loss Component ### 11.11.23
-    lambda_identity = lambda_cycle * 0.5
-
     with open(os.path.join(root_dir, "losses.txt"), "a") as file:
         # Training loop
         for epoch in tqdm(range(num_epochs), desc="Epochs", leave=True, position=0):
             batch_progress = tqdm(enumerate(dataloader), desc="Batches", leave=False, position=1, total=len(dataloader))
             for i, batch in batch_progress:
-                # Assuming your batch is a tuple of (data_A, data_B)
                 real_A = batch[0].to(device)
-                # print(real_A.shape)
                 real_B = batch[1].to(device)
                 # Forward passes
                 fake_B = generator_A2B(real_A)
