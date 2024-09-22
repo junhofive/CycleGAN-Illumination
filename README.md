@@ -22,6 +22,6 @@ Synthesis of realistic virtual environments requires careful rendering of light 
     ```
 
 3. Run the Main Program.
-```console
+    ```console
     python3 main.py [DATA_ROOT] [SAVED_MODEL_PATH] [DATA_TYPE {Portal,Blender}] [EPOCHS] [OUTPUT_DIR] [MODE {train,test}]
     ```
